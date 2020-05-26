@@ -1,0 +1,2 @@
+# StockTradingSearch
+个人分析股票的涨跌包含爬虫及数据分析
