@@ -44,6 +44,7 @@ class MysqlSavePipeline(object):
             password=settings['DBPASSWORD'],
             database=settings['DBDATABASE'],
             charset=settings['DBCHARSET'])
+        self.cursor = self.conn.cursor()
 
     def process_item(self, item, spider):
         if isinstance(item, LonghuTHSItem):
@@ -54,25 +55,23 @@ class MysqlSavePipeline(object):
 
     def saveLonghuTHSItem(self,item):
         assert isinstance(item, LonghuTHSItem)
-        cursor=self.conn.cursor()
         sql='''
         insert into LonghuTHSItem(code,name,href,price,price_change_rate,trading_volume,purchases,date) 
         values ('{}','{}','{}','{}','{}','{}','{}','{}')
         '''.format(item['code'],item['name'],item['href'],item['price'],item['price_change_rate'],
         item['trading_volume'],item['purchases'],item['date'])
-        cursor.execute(sql)
+        self.cursor.execute(sql)
         self.conn.commit()
         # cursor.close()
 
     def saveLonghuTop5THSItemFile(self,item):
         assert isinstance(item, LonghuTop5THSItem)
-        cursor=self.conn.cursor()
         sql='''
         insert into LonghuTop5THSItem(code,title,fund_company,fund_company_href,purchases,sell,net_amount,date) 
         values('{}','{}','{}','{}','{}','{}','{}','{}')
         '''.format(item['code'],item['title'],item['fund_company'],item['fund_company_href'],item['purchases'],
         item['sell'],item['net_amount'],item['date'])
-        cursor.execute(sql)
+        self.cursor.execute(sql)
         self.conn.commit()
         # cursor.close()
 

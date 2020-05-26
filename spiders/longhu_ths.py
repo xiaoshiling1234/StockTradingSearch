@@ -6,26 +6,31 @@ from items import LonghuTHSItem,LonghuTop5THSItem
 class LonghuThsSpider(scrapy.Spider):
     name = 'longhu_ths'
     allowed_domains = ['data.10jqka.com.cn']
-    start_urls = ['http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-06/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-07/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-08/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-09/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-10/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-11/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-12/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-13/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-14/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-15/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-16/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-17/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-18/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-19/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-20/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-21/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-22/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-23/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-24/'
-,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-25/']
+
+    def __init__(self, date=None, *args, **kwargs):
+        super(LonghuThsSpider, self).__init__(*args, **kwargs)
+        self.start_urls = ['http://data.10jqka.com.cn/ifmarket/lhbggxq/report/%s/' % date]
+
+#     start_urls = ['http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-06/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-07/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-08/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-09/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-10/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-11/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-12/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-13/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-14/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-15/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-16/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-17/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-18/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-19/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-20/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-21/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-22/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-23/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-24/'
+# ,'http://data.10jqka.com.cn/ifmarket/lhbggxq/report/2020-05-25/']
 
     def parse(self, response):
         date=response.request.url.split('/')[-2]
@@ -74,4 +79,4 @@ class LonghuThsSpider(scrapy.Spider):
         pass
 
 if __name__ == '__main__':
-    cmdline.execute('scrapy crawl longhu_ths'.split())
+    cmdline.execute('scrapy crawl longhu_ths -a date=20200525'.split())
