@@ -4,7 +4,8 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
+import random
+from scrapy.utils.project import get_project_settings
 from scrapy import signals
 
 
@@ -101,3 +102,32 @@ class GupiaoDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+# Scrapy 内置的 Downloader Middleware 为 Scrapy 供了基础的功能，
+# 定义一个类，其中（object）可以不写，效果一样
+class SimpleProxyMiddleware(object):
+    settings = get_project_settings()
+    # 声明一个数组
+    proxyList = settings['PROXYLIST']
+
+    # Downloader Middleware的核心方法，只有实现了其中一个或多个方法才算自定义了一个Downloader Middleware
+    def process_request(self, request, spider):
+        # 随机从其中选择一个，并去除左右两边空格
+        proxy = random.choice(self.proxyList).strip()
+        # 打印结果出来观察
+        print("this is request ip:" + proxy)
+        # 设置request的proxy属性的内容为代理ip
+        request.meta['proxy'] = proxy
+
+    # Downloader Middleware的核心方法，只有实现了其中一个或多个方法才算自定义了一个Downloader Middleware
+    def process_response(self, request, response, spider):
+        # 请求失败不等于200
+        if response.status != 200:
+            # 重新选择一个代理ip
+            proxy = random.choice(self.proxyList).strip()
+            print("this is response ip:" + proxy)
+            # 设置新的代理ip内容
+            request.mete['proxy'] = proxy
+            return request
+        return response

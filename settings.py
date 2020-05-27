@@ -52,9 +52,10 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
+DOWNLOADER_MIDDLEWARES = {
 #    'gupiao.middlewares.GupiaoDownloaderMiddleware': 543,
-#}
+    'gupiao.middlewares.SimpleProxyMiddleware':500,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -99,3 +100,5 @@ DBDATABASE='crawler'
 DBCHARSET='utf8'
 
 LOG_LEVEL='INFO'
+
+PROXYLIST = 'http://212.129.43.105:5836', 'http://188.226.141.61:8080'

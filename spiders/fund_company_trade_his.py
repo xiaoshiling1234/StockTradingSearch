@@ -2,9 +2,6 @@
 import pymysql
 import scrapy
 from scrapy import cmdline
-
-import settings
-from items import LonghuTHSItem, LonghuTop5THSItem
 from scrapy.utils.project import get_project_settings
 
 
@@ -31,7 +28,11 @@ class fund_company_trade_his(scrapy.Spider):
         self.start_urls = []
         for row in results_db:
             self.start_urls.append(row[1])
-        print(self.start_urls)
+
+    def start_requests(self):
+        yield scrapy.Request('http://www.example.com/1.html', self.parse)
+        yield scrapy.Request('http://www.example.com/2.html', self.parse)
+        yield scrapy.Request('http://www.example.com/3.html', self.parse)
 
     def parse(self, response):
         pass
