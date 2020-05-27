@@ -4,7 +4,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from items import LonghuTop5THSItem, LonghuTHSItem
+from items import LonghuTop5THSItem, LonghuTHSItem, FundCompanyTradeHisItem
 import json
 import pymysql
 from scrapy.utils.project import get_project_settings
@@ -51,6 +51,8 @@ class MysqlSavePipeline(object):
             self.saveLonghuTHSItem(item)
         elif isinstance(item, LonghuTop5THSItem):
             self.saveLonghuTop5THSItemFile(item)
+        elif isinstance(item, FundCompanyTradeHisItem):
+            self.saveFundCompanyTradeHisItem(item)
         return item
 
     def saveLonghuTHSItem(self,item):
@@ -74,6 +76,16 @@ class MysqlSavePipeline(object):
         self.cursor.execute(sql)
         self.conn.commit()
         # cursor.close()
+
+    def saveFundCompanyTradeHisItem(self,item):
+        assert isinstance(item, FundCompanyTradeHisItem)
+        sql='''
+        insert into FundCompanyTradeHisItem(date,fund_company_name,stock_name,purchases,sell,net_amount,price_change_rate,reason,block_name) 
+        values('{}','{}','{}','{}','{}','{}','{}','{}','{}')
+        '''.format(item['date'],item['fund_company_name'],item['stock_name'],item['purchases'],item['sell'],
+        item['net_amount'],item['price_change_rate'],item['reason'],item['block_name'])
+        self.cursor.execute(sql)
+        self.conn.commit()
 
     def close_spider(self, spider):
         self.conn.close()

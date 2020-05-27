@@ -5,6 +5,8 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 import random
+
+import requests
 from scrapy.utils.project import get_project_settings
 from scrapy import signals
 
@@ -107,9 +109,14 @@ class GupiaoDownloaderMiddleware(object):
 # Scrapy 内置的 Downloader Middleware 为 Scrapy 供了基础的功能，
 # 定义一个类，其中（object）可以不写，效果一样
 class SimpleProxyMiddleware(object):
-    settings = get_project_settings()
-    # 声明一个数组
-    proxyList = settings['PROXYLIST']
+    with open('../ip.txt', 'r') as f1:
+        proxyList = f1.readlines()
+    for i in range(0, len(proxyList)):
+        proxyList[i] = proxyList[i].rstrip('\n')
+    # settings = get_project_settings()
+    # # 声明一个数组
+    # proxyList = settings['PROXYLIST']
+    print(proxyList)
 
     # Downloader Middleware的核心方法，只有实现了其中一个或多个方法才算自定义了一个Downloader Middleware
     def process_request(self, request, spider):
@@ -131,3 +138,36 @@ class SimpleProxyMiddleware(object):
             request.mete['proxy'] = proxy
             return request
         return response
+
+
+# Scrapy 内置的 Downloader Middleware 为 Scrapy 供了基础的功能，
+# 定义一个类，其中（object）可以不写，效果一样
+def getIp():
+    settings = get_project_settings()
+    response = requests.get(settings['API_URL'])
+    ip = "http://" + response.text
+    return ip
+
+
+class AutoApiProxyMiddleware(object):
+    # 声明一个数组
+    ip = getIp()
+    # Downloader Middleware的核心方法，只有实现了其中一个或多个方法才算自定义了一个Downloader Middleware
+    def process_request(self, request, spider):
+        # 打印结果出来观察
+        # print("this is request ip:" + self.ip)
+        # 设置request的proxy属性的内容为代理ip
+        request.meta['proxy'] = self.ip
+
+    # Downloader Middleware的核心方法，只有实现了其中一个或多个方法才算自定义了一个Downloader Middleware
+    def process_response(self, request, response, spider):
+        # 请求失败不等于200
+        if response.status != 200:
+            # 重新选择一个代理ip
+            self.ip=getIp()
+            # print("this is response ip:" + self.ip)
+            # 设置新的代理ip内容
+            request.mete['proxy'] = self.ip
+            return request
+        return response
+

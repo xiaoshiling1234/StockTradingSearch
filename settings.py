@@ -21,8 +21,7 @@ NEWSPIDER_MODULE = 'gupiao.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
-# Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -55,6 +54,7 @@ ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {
 #    'gupiao.middlewares.GupiaoDownloaderMiddleware': 543,
     'gupiao.middlewares.SimpleProxyMiddleware':500,
+    # 'gupiao.middlewares.AutoApiProxyMiddleware':500,
 }
 
 # Enable or disable extensions
@@ -99,6 +99,10 @@ DBPASSWORD='123456'
 DBDATABASE='crawler'
 DBCHARSET='utf8'
 
-LOG_LEVEL='INFO'
-
-PROXYLIST = 'http://212.129.43.105:5836', 'http://188.226.141.61:8080'
+API_URL= 'http://ip.11jsq.com/index.php/api/entry?method=proxyServer.generate_api_url&packid=1&fa=0&fetch_key=&groupid=0&qty=1&time=1&pro=&city=&port=1&format=txt&ss=1&css=&dt=1&specialTxt=3&specialJson=&usertype=2'
+# LOG_LEVEL='INFO'
+# CLOSESPIDER_ITEMCOUNT =50
+# DOWNLOAD_DELAY=0.5
+# # Configure maximum concurrent requests performed by Scrapy (default: 16)
+# CONCURRENT_REQUESTS = 100
+# DOWNLOAD_TIMEOUT=10

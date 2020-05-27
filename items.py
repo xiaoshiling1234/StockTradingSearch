@@ -33,3 +33,14 @@ class LonghuTop5THSItem(scrapy.Item):
     sell = scrapy.Field()
     net_amount = scrapy.Field()
     date = scrapy.Field()
+
+class FundCompanyTradeHisItem(scrapy.Item):
+    date = scrapy.Field()
+    fund_company_name = scrapy.Field()
+    stock_name = scrapy.Field()
+    reason = scrapy.Field()
+    price_change_rate = scrapy.Field()
+    purchases = scrapy.Field()
+    sell = scrapy.Field()
+    net_amount = scrapy.Field()
+    block_name = scrapy.Field()
